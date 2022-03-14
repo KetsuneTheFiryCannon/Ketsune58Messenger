@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     EditText mEditTextInput;
     Button mButtonInput;
 
+    FirebaseTranslator englishJapanTranslator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +59,17 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerviewOutput.setAdapter(dataAdapter);
 
+        FirebaseTranslatorOptions options =
+                new FirebaseTranslatorOptions.Builder()
+                        // below line we are specifying our source language.
+                        .setSourceLanguage(FirebaseTranslateLanguage.EN)
+                        // in below line we are displaying our target language.
+                        .setTargetLanguage(FirebaseTranslateLanguage.JA)
+                        // after that we are building our options.
+                        .build();
+        // below line is to get instance
+        // for firebase natural language.
+        englishJapanTranslator = FirebaseNaturalLanguage.getInstance().getTranslator(options);
 
         mButtonInput.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,9 +79,11 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+                //translateLanguage(mEditTextInput.getText().toString());
                 myRef.push().setValue(msg);
-                mEditTextInput.setText("");
                 mRecyclerviewOutput.smoothScrollToPosition(messagesStorage.size());
+                downloadModal(mEditTextInput.getText().toString());
+                mEditTextInput.setText("");
             }
         });
 
@@ -102,5 +116,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void downloadModal(String input) {
+        // below line is use to download the modal which
+        // we will require to translate in german language
+        FirebaseModelDownloadConditions conditions = new FirebaseModelDownloadConditions.Builder().requireWifi().build();
+
+        // below line is use to download our modal.
+        englishJapanTranslator.downloadModelIfNeeded(conditions).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+                // this method is called when modal is downloaded successfully.
+                Toast.makeText(MainActivity.this, "Please wait language modal is being downloaded.", Toast.LENGTH_SHORT).show();
+
+                // calling method to translate our entered text.
+                translateLanguage(input);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, "Fail to download modal", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void translateLanguage(String input) {
+//            Toast.makeText(MainActivity.this, englishJapanTranslator.translate("Hi").toString(), Toast.LENGTH_SHORT).show();
+//            mEditTextInput.setText(englishJapanTranslator.translate(input).toString());
+        englishJapanTranslator.translate(input).addOnSuccessListener(new OnSuccessListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+                mEditTextInput.setText(s);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mEditTextInput.setText(e.toString());
+                Toast.makeText(MainActivity.this, "Fail to translate", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
