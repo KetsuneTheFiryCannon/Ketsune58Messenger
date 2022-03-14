@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "666472175370",
+    "project_id": "ketsune58messenger",
+    "storage_bucket": "ketsune58messenger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666472175370:android:edda37efb8e5cec51e0cf3",
+        "android_client_info": {
+          "package_name": "com.example.ketsune58messenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666472175370-5s4olp5f4v8abu438cu41m22hoi6f3kj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4rldEI1zTJyY8VUojJq4Q1AxPPnxFHU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666472175370-5s4olp5f4v8abu438cu41m22hoi6f3kj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
