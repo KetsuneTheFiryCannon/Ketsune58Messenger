@@ -10,4 +10,7 @@ public class Message {
         this.to = to;
         this.text = text;
     }
+
+    public Message(){
+    }
 }
