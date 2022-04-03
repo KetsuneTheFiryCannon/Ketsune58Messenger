@@ -22,6 +22,7 @@ public class DataAdapter extends RecyclerView.Adapter<ViewHolder> {
     public DataAdapter(Context context, ArrayList<String> messages, ArrayList<String> owner) {
         this.owner = owner;
         this.messages = messages;
+
         this.inflater = LayoutInflater.from(context);
     }
 

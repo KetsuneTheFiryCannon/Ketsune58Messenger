@@ -97,7 +97,7 @@ public class RegActivity extends AppCompatActivity {
         registerButton.setOnClickListener(view -> {
             String middle = String.valueOf(loginInputTxt.getText());
             String middle1 = String.valueOf(passwordInputTxt.getText());
-            Intent intent = new Intent(this, DialogActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             //Intent intent = new Intent(this, MainActivity.class);
             try {
                 for (int i = 0; i<data.size();i++)

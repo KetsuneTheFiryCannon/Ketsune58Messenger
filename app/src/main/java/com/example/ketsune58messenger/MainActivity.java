@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
 
             dataAdapter.notifyDataSetChanged();
         });
-
     }
 
     private void downloadModal(String input) {
