@@ -30,7 +30,6 @@ import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOption
 import java.util.ArrayList;
 import java.util.Objects;
 
-
 public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -39,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int MAX_MESSAGE_LENGTH = 100;
 
+    ArrayList<Integer> dialogsStorage = new ArrayList<>();
     ArrayList<String> messagesStorage = new ArrayList<>();
     ArrayList<String> messageOwner = new ArrayList<>();
     RecyclerView mRecyclerviewOutput;
@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
             public void onChildChanged(@NonNull DataSnapshot snapshot, @androidx.annotation.Nullable String previousChildName) {
                 Object user = snapshot.getValue(Object.class);
                 Utility.MESSAGE_ON_START = Integer.parseInt((String) user);
-                //mEditTextInput.setText("It works");
 
                 for (int i = 1; i < Utility.MESSAGE_ON_START + 1; i++) {
                     ValueEventListener postListener = new ValueEventListener() {
@@ -126,8 +125,10 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 Object user = task.getResult().getValue(Object.class);
                 Utility.MESSAGE_ON_START = Integer.parseInt((String) user);
-
                 for (int i = 1; i < Utility.MESSAGE_ON_START + 1; i++) {
+
+                    createDialogBase(i);
+
                     ValueEventListener postListener = new ValueEventListener() {
                         @SuppressLint("NotifyDataSetChanged")
                         @Override
@@ -136,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
                             assert message != null;
 
                             findOwner(message.from);
+                            dialogsStorage.add(message.from);
+                            dialogsStorage.add(message.to);
 
                             downloadModal(String.valueOf(message.text));
 
@@ -185,6 +188,28 @@ public class MainActivity extends AppCompatActivity {
                 Utility.CURRENT_OWNER = String.valueOf(user);
 
                 messageOwner.add(String.valueOf(user));
+            }
+        });
+    }
+
+    private void createDialogBase(int messageID){
+        messageDataBase.child(String.valueOf(messageID)).child("from").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                Object message = task.getResult().getValue(Object.class);
+
+                String middle = String.valueOf(message);
+                dialogsStorage.add(Integer.valueOf(middle));
+            }
+        });
+
+        messageDataBase.child(String.valueOf(messageID)).child("to").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                Object message = task.getResult().getValue(Object.class);
+
+                String middle = String.valueOf(message);
+                dialogsStorage.add(Integer.valueOf(middle));
             }
         });
     }

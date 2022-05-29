@@ -48,7 +48,7 @@ public class RegActivity extends AppCompatActivity {
         userDataBase.child("userCounter").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-                Object user = task.getResult().getValue(Object.class);
+                Object user = task. getResult().getValue(Object.class);
 
                 String jsonString = String.valueOf(user); //assign your JSON String here
                 JSONObject obj = null;
